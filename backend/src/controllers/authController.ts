@@ -44,13 +44,23 @@ export async function loginHandler(req: FastifyRequest, reply: FastifyReply) {
   }
 
   // Cookie beállítás (session helyett)
-  reply.setCookie('auth', JSON.stringify({ id: user.id, isAdmin: user.isAdmin }), {
+  reply.setCookie('auth', JSON.stringify({ 
+    id: user.id, 
+    username: user.username,
+    isAdmin: user.isAdmin 
+  }), {
     path: '/',
-    httpOnly: true,
+    httpOnly: false, // Allow frontend to read the cookie
     sameSite: 'lax',
     secure: false,
     maxAge: 60 * 60 * 24,
   })
 
   return reply.send({ authenticated: true, isAdmin: user.isAdmin })
+}
+
+export async function logoutHandler(req: FastifyRequest, reply: FastifyReply) {
+  // Clear the auth cookie
+  reply.clearCookie('auth', { path: '/' })
+  return reply.send({ message: 'Logged out successfully' })
 }

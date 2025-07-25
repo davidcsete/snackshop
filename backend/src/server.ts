@@ -9,7 +9,10 @@ import orderRoutes from './routes/orderRoutes'
 
 dotenv.config()
 
-const server = Fastify()
+// ✅ Logger engedélyezve
+const server = Fastify({
+  logger: true
+})
 
 server.register(cors, {
   origin: true,
@@ -22,15 +25,14 @@ server.register(protectedRoutes)
 server.register(productRoutes)
 server.register(orderRoutes)
 
-
 server.get('/api/health', async () => {
   return { status: 'ok' }
 })
 
 server.listen({ port: 3001 }, err => {
   if (err) {
-    console.error(err)
+    server.log.error(err)
     process.exit(1)
   }
-  console.log('Server listening on http://localhost:3001')
+  server.log.info('Server listening on http://localhost:3001')
 })
