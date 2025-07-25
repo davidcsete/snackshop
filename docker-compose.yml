@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:15
+    container_name: snackshop-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: dcsete
+      POSTGRES_PASSWORD: Aa123456
+      POSTGRES_DB: snackshop
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
